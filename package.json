@@ -1,0 +1,13 @@
+{
+  "private": true,
+  "name": "SimpleSysControl",
+  "version": "1.0.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "packageManager": "yarn@3.2.0",
+  "resolutions": {
+    "@types/react": "17.0.30"
+  }
+}
