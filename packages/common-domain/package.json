@@ -1,0 +1,16 @@
+{
+  "name": "common-domain",
+  "packageManager": "yarn@3.2.0",
+  "version": "1.0.0",
+  "description": "My New Project description.",
+  "scripts": {
+    "build": "npx tsc"
+  },
+  "author": "Your Name <you@example.com>",
+  "license": "MIT",
+  "files": [
+    "lib/**/*"
+  ],
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts"
+}

@@ -2,6 +2,7 @@ import { exec } from 'child_process';
 import React, { FC, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { Button, Dialog, Paragraph, Portal } from 'react-native-paper';
+import API from '../../data/network/APIClient';
 
 type ActionButtonProps = {
     label: string,
@@ -21,18 +22,19 @@ const ActionButton: FC<ActionButtonProps> = ({ label, action }) => {
         setInfoVisible(true)
     }
 
-    const execute = () => {
+    const execute = async () => {
         hideDialog()
         try {
-            exec(`dbus-send --system --print-reply --dest=org.freedesktop.login1 /org/freedesktop/login1 org.freedesktop.login1.Manager.${action} boolean:false`, (error, stdout, stderr) => {
-                if (error) {
-                    showInfoDialog(error.message)
-                }
+            await API.get('/')
+            // exec(`dbus-send --system --print-reply --dest=org.freedesktop.login1 /org/freedesktop/login1 org.freedesktop.login1.Manager.${action} boolean:false`, (error, stdout, stderr) => {
+            //     if (error) {
+            //         showInfoDialog(error.message)
+            //     }
 
-                if (stderr) {
-                    showInfoDialog(stderr)
-                }
-            })
+            //     if (stderr) {
+            //         showInfoDialog(stderr)
+            //     }
+            // })
         } catch {
             showInfoDialog('Failed to execute the command!')
         }
