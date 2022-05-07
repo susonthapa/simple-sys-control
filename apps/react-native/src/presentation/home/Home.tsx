@@ -1,15 +1,29 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Action } from 'common-domain';
+import React, { useEffect, useState } from 'react';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { fetchActions } from '../../data/network/API';
 import ActionButton from '../components/ActionButton';
 
 const HomeScreen = () => {
+    const [actions, setActions] = useState<Action[]>()
+    useEffect(() => {
+        async function fetchData() {
+            const actions = await fetchActions()
+            setActions(actions)
+        }
+        fetchData()
+    }, [])
+
     return (
         <View style={styles.container}>
             <Text style={{ fontSize: 36, color: 'black', alignSelf: 'center', margin: 16 }}>SimpleSysControl</Text>
-            <View style={{ flexDirection: 'row', }}>
-                <ActionButton label='Suspend' action='Suspend' />
-                <ActionButton label='Shutdown' action='Shutdown' />
-            </View>
+            <FlatList
+                data={actions}
+                renderItem={({ item }) => (
+                    <ActionButton action={item} />
+                )}
+                numColumns={2}
+            />
         </View>
     );
 }
