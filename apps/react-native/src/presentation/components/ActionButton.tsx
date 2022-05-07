@@ -1,8 +1,8 @@
-import { exec } from 'child_process';
 import React, { FC, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { Button, Dialog, Paragraph, Portal } from 'react-native-paper';
 import API from '../../data/network/APIClient';
+import { ApiResponse } from 'common-domain'
 
 type ActionButtonProps = {
     label: string,
@@ -25,16 +25,12 @@ const ActionButton: FC<ActionButtonProps> = ({ label, action }) => {
     const execute = async () => {
         hideDialog()
         try {
-            await API.get('/')
-            // exec(`dbus-send --system --print-reply --dest=org.freedesktop.login1 /org/freedesktop/login1 org.freedesktop.login1.Manager.${action} boolean:false`, (error, stdout, stderr) => {
-            //     if (error) {
-            //         showInfoDialog(error.message)
-            //     }
-
-            //     if (stderr) {
-            //         showInfoDialog(stderr)
-            //     }
-            // })
+            const response = await API.post<ApiResponse>('/action', {
+                action: action,
+            })
+            if (response.data?.code !== 200) {
+                showInfoDialog(response.data?.message)
+            }
         } catch {
             showInfoDialog('Failed to execute the command!')
         }

@@ -8,7 +8,7 @@ const HomeScreen = () => {
             <Text style={{ fontSize: 36, color: 'black', alignSelf: 'center', margin: 16 }}>SimpleSysControl</Text>
             <View style={{ flexDirection: 'row', }}>
                 <ActionButton label='Suspend' action='Suspend' />
-                <ActionButton label='Suspend' action='Shutdown' />
+                <ActionButton label='Shutdown' action='Shutdown' />
             </View>
         </View>
     );

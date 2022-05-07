@@ -1,8 +1,10 @@
-import express, { Express, Request, Response } from 'express'
-import dotenv from 'dotenv'
-import cors, { CorsOptions } from 'cors'
+import bodyParser from 'body-parser';
 import { exec } from 'child_process';
-import { success, failure } from 'common-domain'
+import { failure, success } from 'common-domain';
+import cors, { CorsOptions } from 'cors';
+import dotenv from 'dotenv';
+import express, { Express } from 'express';
+import path from 'path'
 
 dotenv.config();
 
@@ -21,10 +23,18 @@ const corsOptions: CorsOptions = {
   },
   credentials: true,
 }
+const jsonParser = bodyParser.json()
 app.use(cors(corsOptions))
 
-app.get('/', (req, res) => {
-  exec(`dbus-send --system --print-reply --dest=org.freedesktop.login1 /org/freedesktop/login1 org.freedesktop.login1.Manager.Suspend boolean:false`, (error, stdout, stderr) => {
+app.use(express.static(path.resolve(__dirname, '../../react-native/web-build')))
+
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../../react-native/web-build', 'index.html'))
+})
+
+app.post('/action', jsonParser, (req, res) => {
+
+  exec(`dbus-send --system --print-reply --dest=org.freedesktop.login1 /org/freedesktop/login1 org.freedesktop.login1.Manager.${req.body.action} boolean:false`, (error, stdout, stderr) => {
     if (error) {
       return res.json(failure({
         code: 500,
